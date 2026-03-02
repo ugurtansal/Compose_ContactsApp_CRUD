@@ -29,4 +29,15 @@ interface ContactsDao {
         @Field("kisi_tel") contactNumber:String
 
     ): Call<CRUDResponse>
+
+
+
+    @POST("kisiler/update_kisiler_.php")
+    @FormUrlEncoded //Türkçe karekter desteği
+    fun updateContact(
+        @Field("kisi_id") contactId:Int,
+        @Field("kisi_ad") contactName:String,
+        @Field("kisi_tel") contactNumber:String
+
+    ): Call<CRUDResponse>
 }
