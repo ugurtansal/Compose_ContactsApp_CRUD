@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
 fun Page() {
 
     LaunchedEffect(Unit) {
-        allCOntacts()
+        searchCntacts()
     }
 
 }
@@ -68,6 +68,33 @@ fun allCOntacts() {
 
     })
 }
+
+
+fun searchCntacts() {
+    val contactsDao = ApiUtils.getContactsDao()
+
+    contactsDao.searchContact("t").enqueue(object : Callback<ContactsResponse> {
+        override fun onResponse(
+            call: Call<ContactsResponse>,
+            response: Response<ContactsResponse>
+        ) {
+
+            val list=response.body().contacts
+
+            list.forEach {item->
+                Log.e("Contact Info","**************************")
+                Log.e("Contact ID",item.contactId.toString())
+                Log.e("Contact Name",item.contactName)
+                Log.e("Contact Number",item.contactNumber)
+            }
+
+        }
+
+        override fun onFailure(call: Call<ContactsResponse?>?, t: Throwable?) {}
+
+    })
+}
+
 
 @Preview(showBackground = true)
 @Composable
