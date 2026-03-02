@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.ugurtansal.contacts_crud_operations.data.response.CRUDResponse
 import com.ugurtansal.contacts_crud_operations.data.response.ContactsResponse
 import com.ugurtansal.contacts_crud_operations.retrofit.ApiUtils
 import com.ugurtansal.contacts_crud_operations.retrofit.ContactsDao
@@ -38,7 +39,7 @@ class MainActivity : ComponentActivity() {
 fun Page() {
 
     LaunchedEffect(Unit) {
-        searchCntacts()
+        deleteAContact()
     }
 
 }
@@ -91,6 +92,37 @@ fun searchCntacts() {
         }
 
         override fun onFailure(call: Call<ContactsResponse?>?, t: Throwable?) {}
+
+    })
+}
+
+
+fun deleteAContact() {
+    val contactsDao = ApiUtils.getContactsDao()
+
+    contactsDao.deleteContact(19307).enqueue(object : Callback<CRUDResponse> {
+        override fun onResponse(
+            call: Call<CRUDResponse>,
+            response: Response<CRUDResponse>
+        ) {
+
+            val responseBody = response.body()
+
+            if (response.isSuccessful && responseBody != null) {
+                // Body null değilse işlemleri yap
+                val success = responseBody.success.toString()
+                val message = responseBody.message ?: "Mesaj yok"
+
+                Log.e("Message Success", success)
+                Log.e("Message Delete", message)
+            } else {
+                // Sunucu hata döndürdüyse (404, 500 vb.) veya body boşsa
+                Log.e("Error", "Sunucudan boş veya hatalı yanıt geldi: ${response.code()}")
+            }
+
+        }
+
+        override fun onFailure(call: Call<CRUDResponse>?, t: Throwable?) {}
 
     })
 }

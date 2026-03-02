@@ -1,5 +1,6 @@
 package com.ugurtansal.contacts_crud_operations.retrofit
 
+import com.ugurtansal.contacts_crud_operations.data.response.CRUDResponse
 import com.ugurtansal.contacts_crud_operations.data.response.ContactsResponse
 import retrofit2.Call
 import retrofit2.http.Field
@@ -16,4 +17,8 @@ interface ContactsDao {
     @POST("kisiler/tum_kisiler_arama.php")
     @FormUrlEncoded //Türkçe karekter desteği
     fun searchContact(@Field("kisi_ad") searchedValue: String): Call<ContactsResponse>
+
+    @POST("kisiler/delete_kisiler_.php")
+    @FormUrlEncoded //Türkçe karekter desteği
+    fun deleteContact(@Field("kisi_id") deletedId: Int): Call<CRUDResponse>
 }
