@@ -21,4 +21,12 @@ interface ContactsDao {
     @POST("kisiler/delete_kisiler_.php")
     @FormUrlEncoded //Türkçe karekter desteği
     fun deleteContact(@Field("kisi_id") deletedId: Int): Call<CRUDResponse>
+
+    @POST("kisiler/insert_kisiler_.php")
+    @FormUrlEncoded //Türkçe karekter desteği
+    fun insertContact(
+        @Field("kisi_ad") contactName:String,
+        @Field("kisi_tel") contactNumber:String
+
+    ): Call<CRUDResponse>
 }

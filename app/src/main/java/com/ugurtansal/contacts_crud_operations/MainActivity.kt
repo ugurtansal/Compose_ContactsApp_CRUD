@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
 fun Page() {
 
     LaunchedEffect(Unit) {
-        deleteAContact()
+        insertCntacts()
     }
 
 }
@@ -120,9 +120,41 @@ fun deleteAContact() {
                 Log.e("Error", "Sunucudan boş veya hatalı yanıt geldi: ${response.code()}")
             }
 
+
         }
 
         override fun onFailure(call: Call<CRUDResponse>?, t: Throwable?) {}
+
+    })
+}
+
+fun insertCntacts() {
+    val contactsDao = ApiUtils.getContactsDao()
+
+    contactsDao.insertContact("Selim","25658423").enqueue(object : Callback<CRUDResponse> {
+        override fun onResponse(
+            call: Call<CRUDResponse>,
+            response: Response<CRUDResponse>
+        ) {
+
+            val responseBody = response.body()
+
+            if (response.isSuccessful && responseBody != null) {
+                // Body null değilse işlemleri yap
+                val success = responseBody.success.toString()
+                val message = responseBody.message ?: "Mesaj yok"
+
+                Log.e("Message Success", success)
+                Log.e("Message Delete", message)
+            } else {
+                // Sunucu hata döndürdüyse (404, 500 vb.) veya body boşsa
+                Log.e("Error", "Sunucudan boş veya hatalı yanıt geldi: ${response.code()}")
+            }
+
+
+        }
+
+        override fun onFailure(call: Call<CRUDResponse?>?, t: Throwable?) {}
 
     })
 }
